@@ -3,53 +3,26 @@ import telebot
 from telebot import types
 from telebot.util import quick_markup
 
-from IOFs import write_interactions, read_interactions, write_profiles, read_profiles
-
-
-class Metrics:
-    def __init__(self, dictionary, key, default=None) -> None:
-        self.dict = dictionary
-        self.key = key
-        self.default = default
-
-    @property
-    def val(self):
-        return self.dict.get(self.key, self.default)
-
-    @val.setter
-    def val(self, value):
-        self.dict[self.key] = value
-
-
-class Profile:
-    def __init__(self, name="", surname="", sex=None, age=-1, description="", photo=""):
-        self.name = name
-        self.surname = surname
-        self.sex = sex
-        self.age = age
-        self.desc = description
-        self.photo = photo
-
-    def __str__(self) -> str:
-        return (
-            f"Имя: {self.name}\n"
-            f"Фамилия: {self.surname}\n"
-            f"пол: {self.sex}\n"
-            f"возраст: {self.age}\n"
-            f"описание: {self.desc if len(self.desc)<30 else self.desc[:10]+'...'+self.desc[-10:]}\n"
-            f"фото: {self.photo[:10]+'...'+self.photo[-10:]}\n"
-        )
+from IOFs import (
+    write_interactions,
+    read_interactions,
+    # write_profiles,
+    # read_profiles,
+    write_profiles_json,
+    read_profiles_json,
+)
+from over_classes import JSONDataAdapter, Metrics, Profile
 
 
 class Bot(telebot.TeleBot):
     def __init__(self, token):
         super().__init__(token)
         self.states = {}  # { id->int: state->Any[float, str] }
-        self.profiles = read_profiles()  # { id->int: User->class }
+        self.profiles = JSONDataAdapter.from_json(
+            read_profiles_json()
+        )  # { id->int: Profile->class }
         self.temp_profiles = {}
-        self.interactions = (
-            read_interactions()
-        )  # { id_from->int: list(id_to->int) }
+        self.interactions = read_interactions()  # { id_from->int: list(id_to->int) }
 
     def get_stranger(self, id_from):
         interaction = self.interactions.get(id_from, {"like": [], "dislike": []})
@@ -176,7 +149,7 @@ def commands_handler(message):
 
             # сохроняем профиль в файл
             bot.profiles[chat_id] = temp_profile.val
-            write_profiles(bot.profiles)
+            write_profiles_json(JSONDataAdapter.to_json(bot.profiles))
             state.val = "main_menu"
 
     elif int(state.val) == 2:
@@ -261,10 +234,8 @@ def query_handler(call):
             # edit_used_markup(
             #     call.message, ("👍" if id_to in interactions[chat_id]["like"] else "👎")
             # )
-            try:
-                bot.delete_message(call.message.chat.id, call.message.id)
-            except Exception as e:
-                print(e)
+
+            bot.delete_message(call.message.chat.id, call.message.id)
 
 
 bot.polling(non_stop=True)

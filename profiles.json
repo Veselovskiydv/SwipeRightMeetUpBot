@@ -1,0 +1,34 @@
+{
+    "1207707842": {
+        "name": "Альбина",
+        "surname": "Тамбалеева",
+        "sex": "Ж",
+        "age": 19,
+        "desc": "Я люблю, когда садишься на диван, а там Димина ладошка;)",
+        "photo": "AgACAgIAAxkBAAICBmYWxcCTjOtgrBEfe0Yolr5sSZqYAAJ22TEbHJy4SK0xX55_Q1I7AQADAgADeAADNAQ"
+    },
+    "1485219417": {
+        "name": "Дмитрий",
+        "surname": "Веселовский",
+        "sex": "М",
+        "age": 20,
+        "desc": "Люблю скалолазание, а также ходить летом на Столбы с друзьями)",
+        "photo": "AgACAgIAAxkBAAIBzmYWwcsEq_i-SDSC4dmvpZ1g7vDyAAKO3jEbcRW5SAzZ0gnRxiFvAQADAgADeQADNAQ"
+    },
+    "1251823245": {
+        "name": "Александр",
+        "surname": "Веселовский",
+        "sex": "М",
+        "age": 20,
+        "desc": "Лазать скалы, кушать мясо, кататься лыжи, ботать физика, жить жизнь",
+        "photo": "AgACAgIAAxkBAAIBr2YWwI530n0iF9a9W5WdVCGted7HAALT2TEbftOxSCphm-Y5DWcnAQADAgADeQADNAQ"
+    },
+    "5413318094": {
+        "name": "Светлана",
+        "surname": "Смышляева",
+        "sex": "Ж",
+        "age": 19,
+        "desc": "Я староста группы!",
+        "photo": "AgACAgIAAxkBAAICMmYXlXemCOD8DCNz7qixCAT_McMYAAID2jEb3IHASMB1OxH_o8BtAQADAgADeQADNAQ"
+    }
+}
