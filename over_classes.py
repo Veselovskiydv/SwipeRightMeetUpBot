@@ -64,13 +64,3 @@ class Profile:
             f"описание: {short_text(self.desc)}\n"
             f"фото: {self.photo[:10]+'...'+self.photo[-10:]}\n"
         )
-
-    def __dict__(self) -> dict:
-        return {
-            "name": self.name,
-            "surname": self.surname,
-            "sex": self.sex,
-            "age": self.age,
-            "desc": self.desc,
-            "photo": self.photo,
-        }
