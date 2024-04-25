@@ -105,11 +105,12 @@ class MainMenu:
     def create_profile(self, message, state, temp_profile):
         chat_id = message.chat.id
         cur_username = message.from_user.username
-        temp_profile.val = Profile(cur_username)
 
         if self.get_tail(state.val) == 0:
-            self.bot.send_message(message.chat.id, "Укажите свое имя, фамилию")
+            temp_profile.val = Profile(cur_username)
+            self.bot.send_message(message.chat.id, "Укажите свое имя")
             state.val += 0.1
+            print(temp_profile.val)
         elif self.get_tail(state.val) == 1:
             name = message.text
             # check correct input
@@ -129,6 +130,7 @@ class MainMenu:
                 message.chat.id, "Укажите свой пол 👇", reply_markup=markup
             )
             state.val += 0.1
+            print(temp_profile.val)
         elif self.get_tail(state.val) == 2:
             sex = message.text
             # check correct input
@@ -139,12 +141,14 @@ class MainMenu:
                 message.chat.id, "Укажите свой возраст", reply_markup=rmarkup
             )
             state.val += 0.1
+            print(temp_profile.val)
         elif self.get_tail(state.val) == 3:
             age = message.text
             # check correct input
             temp_profile.val.age = int(age)
             self.bot.send_message(message.chat.id, "Расскажите о себе")
             state.val += 0.1
+            print(temp_profile.val)
         elif self.get_tail(state.val) == 4:
             description = message.text
             # check correct input
@@ -153,8 +157,18 @@ class MainMenu:
                 message.chat.id, "Загрузите одну фотографию для своего профиля"
             )
             state.val += 0.1
+            print(temp_profile.val)
         elif self.get_tail(state.val) == 5:
-            photo = message.photo[-1]
+            try:
+                photo = message.photo[-1]
+            except TypeError:
+                self.bot.send_message(
+                    message.chat.id,
+                    "Ошибка загрузки фотографии. Попробуйте создать профиль еще раз!",
+                )
+                state.val = "main_menu"
+                print(temp_profile.val)
+                return
             # check correct input
             file_info = self.bot.get_file(photo.file_id)
             temp_profile.val.photo = file_info.file_id

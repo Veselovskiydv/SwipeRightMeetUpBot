@@ -80,7 +80,7 @@ def query_handler(call):
                 bot.send_message(chat_id, message_matching(username_to))
                 bot.send_message(id_to, message_matching(chat_username))
 
-            sleep(3)
+            sleep(2)
             if Metrics(bot.states, chat_id).val is not None:  # if bot was stopped
                 commands_handler(call.message)  # get new stranger
 

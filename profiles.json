@@ -8,7 +8,7 @@
         "photo": "AgACAgIAAxkBAAICBmYWxcCTjOtgrBEfe0Yolr5sSZqYAAJ22TEbHJy4SK0xX55_Q1I7AQADAgADeAADNAQ"
     },
     "5413318094": {
-        "username": "Vesssvet",
+        "username": "supermegaultraname",
         "name": "Дмитрий",
         "sex": "М",
         "age": 20,
@@ -30,5 +30,13 @@
         "age": 19,
         "desc": "Я староста группы!",
         "photo": "AgACAgIAAxkBAAICMmYXlXemCOD8DCNz7qixCAT_McMYAAID2jEb3IHASMB1OxH_o8BtAQADAgADeQADNAQ"
+    },
+    "1006378267": {
+        "username": "Alyata18",
+        "name": "Аля",
+        "sex": "Ж",
+        "age": 19,
+        "desc": "Хихи",
+        "photo": "AgACAgIAAxkBAAIDrGYqS-VDriB9aMp-1pqCFTFyudxIAAIs3jEbTYFQSV6nEo5Fl0MmAQADAgADeQADNAQ"
     }
 }
