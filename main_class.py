@@ -3,7 +3,7 @@ from telebot.handler_backends import ContinueHandling
 from telebot.util import quick_markup
 
 from IOFs import read_interactions, read_profiles_json, write_profiles_json
-from over_classes import MainMenu
+from over_classes import CancelMenu, MainMenu, SaveProfileMenu
 
 
 class Bot(telebot.TeleBot):
@@ -13,7 +13,9 @@ class Bot(telebot.TeleBot):
         self.profiles = read_profiles_json()  # { id->int: Profile->class }
         self.temp_profiles = {}  # { id->int: Profile->class } for creating profiles
         self.interactions = read_interactions()  # { id_from->int: list(id_to->int) }
-        self.main_menu = MainMenu(self)  # for functions of main menu
+        self.MainMenu = MainMenu(self)  # for functions of main menu
+        self.CancelMenu = CancelMenu(self)  # for functions of cancel menu
+        self.SaveProfileMenu = SaveProfileMenu(self) # for functions of save profile menu
 
     def get_stranger(self, id_from):
         interaction = self.interactions.get(id_from, {"like": [], "dislike": []})
@@ -58,3 +60,6 @@ class Bot(telebot.TeleBot):
                     write_profiles_json(self.profiles)
                 print("Correct!")
         return ContinueHandling()
+
+    def check_profile(self, chat_id):
+        return self.profiles.get(chat_id, None) is not None

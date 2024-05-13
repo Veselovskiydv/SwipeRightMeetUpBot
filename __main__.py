@@ -15,7 +15,7 @@ bot.register_message_handler(bot.check_username, func=lambda msg: True)
 @bot.message_handler(commands=["start", "menu"])
 def start(message):
     chat_id = message.chat.id
-    markup = bot.main_menu.main_menu()
+    markup = bot.MainMenu.main_markup()
     bot.states[chat_id] = "main_menu"
     bot.send_message(message.chat.id, "Выберите команду 👇", reply_markup=markup)
 
@@ -29,22 +29,47 @@ def commands_handler(message):
     if state.val == "main_menu":
         if message.text == "Создать профиль":
             state.val = 1.0
+            markup = bot.CancelMenu.cancel_markup()
+            bot.send_message(
+                message.chat.id,
+                "Для создания профиля заполните все данные 🗒️",
+                reply_markup=markup,
+            )
         elif message.text == "Посмотреть профиль":
             state.val = 2.0
         elif message.text == "Искать друзей":
             state.val = 3.0
+
+            if bot.check_profile(chat_id):
+                markup = bot.CancelMenu.cancel_markup()
+                bot.send_message(
+                    message.chat.id, "Бот начал поиск друзей...", reply_markup=markup
+                )
+                sleep(1)
+            else:
+                markup = bot.MainMenu.main_markup()
+                bot.send_message(
+                    chat_id, "Вы ещё не создали свой профиль!", reply_markup=markup
+                )
+                state.val = "main_menu"
+                return
+        elif message.text == "Удалить аккаунт":
+            state.val = 4.0
         else:
             bot.send_message(chat_id, "Нажмите на одну из кнопок главного меню!")
             return
 
     if int(state.val) == 1:
-        bot.main_menu.create_profile(message, state, temp_profile)
+        bot.MainMenu.create_profile(message, state, temp_profile)
 
     elif int(state.val) == 2:
-        bot.main_menu.view_profile(chat_id, state, temp_profile)
+        bot.MainMenu.view_profile(chat_id, state, bot.profiles.get(chat_id, None))
 
     elif int(state.val) == 3:
-        bot.main_menu.find_friends(chat_id, state)
+        bot.MainMenu.find_friends(message, chat_id, state)
+
+    elif int(state.val) == 4:
+        bot.MainMenu.remove_account(chat_id, state)
 
     del state, temp_profile  # clear memory
 
@@ -81,7 +106,7 @@ def query_handler(call):
                 bot.send_message(id_to, message_matching(chat_username))
 
             sleep(2)
-            if Metrics(bot.states, chat_id).val is not None:  # if bot was stopped
+            if Metrics(bot.states, chat_id).val is not None:  # if bot wasn't stopped
                 commands_handler(call.message)  # get new stranger
 
         else:
