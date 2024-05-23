@@ -239,7 +239,7 @@ class MainMenu:
     def find_friends(self, message, chat_id, state):
         if self.get_tail(state.val) == 0:
             if message.text == "Выйти":
-                self.bot.stop_search(chat_id, state)
+                self.bot.CancelMenu.stop_search(chat_id, state)
                 return
             id_to = self.bot.get_stranger(chat_id)  # stranger's id
             if id_to:
@@ -248,8 +248,10 @@ class MainMenu:
                 markup = quick_markup(
                     {
                         "👍": {"callback_data": f"like {id_to}"},
+                        "🖼️": {"callback_data": f"give_photos {id_to}"},
                         "👎": {"callback_data": f"dislike {id_to}"},
-                    }
+                    },
+                    row_width=3,
                 )
                 file_info = self.bot.get_file(stranger.photo)
                 downloaded_file = self.bot.download_file(file_info.file_path)
@@ -309,7 +311,7 @@ class CancelMenu:
 
     def stop_search(self, chat_id, state):
         state.val = "main_menu"
-        markup = self.bot.MainMune.main_markup()
+        markup = self.bot.MainMenu.main_markup()
         self.bot.send_message(chat_id, "Поиск остановлен", reply_markup=markup)
 
 

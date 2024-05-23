@@ -8,7 +8,7 @@ from over_classes import CancelMenu, MainMenu, SaveProfileMenu
 
 class Bot(telebot.TeleBot):
     def __init__(self, token):
-        super().__init__(token)
+        super().__init__(token, threaded=False)
         self.states = {}  # { id->int: state->Any[float, str] }
         self.profiles = read_profiles_json()  # { id->int: Profile->class }
         self.temp_profiles = {}  # { id->int: Profile->class } for creating profiles

@@ -90,24 +90,43 @@ def query_handler(call):
             not in bot.interactions.get(chat_id, {"like": []})["like"]
             + bot.interactions.get(chat_id, {"dislike": []})["dislike"]
         ):
-            bot.edit_used_markup(call.message, ("👍" if reaction == "like" else "👎"))
+            if reaction in ("like", "dislike"):
 
-            bot.interactions.setdefault(
-                call.message.chat.id, {"like": [], "dislike": []}
-            )[reaction].append(id_to)
+                bot.edit_used_markup(call.message, ("👍" if reaction == "like" else "👎"))
 
-            write_interactions(bot.interactions)
+                bot.interactions.setdefault(
+                    call.message.chat.id, {"like": [], "dislike": []}
+                )[reaction].append(id_to)
 
-            if reaction == "like" and bot.check_matching(chat_id, id_to):
-                message_matching = lambda username: (  # noqa: E731
-                    f"Some person has liked you too! 🎉\n @{username}"
-                )
-                bot.send_message(chat_id, message_matching(username_to))
-                bot.send_message(id_to, message_matching(chat_username))
+                write_interactions(bot.interactions)
 
-            sleep(2)
-            if Metrics(bot.states, chat_id).val is not None:  # if bot wasn't stopped
-                commands_handler(call.message)  # get new stranger
+                if reaction == "like" and bot.check_matching(chat_id, id_to):
+                    message_matching = lambda username: (  # noqa: E731
+                        f"Some person has liked you too! 🎉\n @{username}"
+                    )
+                    bot.send_message(chat_id, message_matching(username_to))
+                    bot.send_message(id_to, message_matching(chat_username))
+
+                sleep(2)
+                if Metrics(bot.states, chat_id).val is not None:  # if bot wasn't stopped
+                    commands_handler(call.message)  # get new stranger
+
+            elif reaction == "give_photos":
+
+                profile_stranger = bot.profiles[id_to]
+
+                if len(profile_stranger.photo) > 1:
+                    from telebot.types import InputMediaPhoto
+
+                    medias = [InputMediaPhoto(file_id) for file_id in profile_stranger.photo]
+                    bot.send_media_group(
+                        chat_id=chat_id, media=medias[1:], protect_content=True
+                    )
+                else:
+                    bot.send_message(
+                        chat_id,
+                        "Пользователь загрузил только одну фотографию!",
+                    )
 
         else:
             bot.delete_message(chat_id, call.message.id)
