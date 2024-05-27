@@ -15,9 +15,8 @@ bot.register_message_handler(bot.check_username, func=lambda msg: True)
 @bot.message_handler(commands=["start", "menu"])
 def start(message):
     chat_id = message.chat.id
-    markup = bot.MainMenu.main_markup()
-    bot.states[chat_id] = "main_menu"
-    bot.send_message(message.chat.id, "Выберите команду 👇", reply_markup=markup)
+    state = Metrics(bot.states, chat_id, "main_menu")  # state of current user
+    bot.MainMenu.choose_command(chat_id, state)
 
 
 @bot.message_handler(content_types=["text", "photo"])
@@ -63,7 +62,8 @@ def commands_handler(message):
         bot.MainMenu.create_profile(message, state, temp_profile)
 
     elif int(state.val) == 2:
-        bot.MainMenu.view_profile(chat_id, state, bot.profiles.get(chat_id, None))
+        bot.MainMenu.view_profile(chat_id, bot.profiles.get(chat_id, None))
+        bot.MainMenu.choose_command(chat_id, state)
 
     elif int(state.val) == 3:
         bot.MainMenu.find_friends(message, chat_id, state)
@@ -102,10 +102,12 @@ def query_handler(call):
 
                 if reaction == "like" and bot.check_matching(chat_id, id_to):
                     message_matching = lambda username: (  # noqa: E731
-                        f"Some person has liked you too! 🎉\n @{username}"
+                        f"Этому пользователю тоже понравился ваш профиль!🎉\n @{username}"
                     )
-                    bot.send_message(chat_id, message_matching(username_to))
-                    bot.send_message(id_to, message_matching(chat_username))
+                    bot.MainMenu.view_profile(chat_id, bot.profiles[id_to])
+                    bot.send_message(chat_id, message_matching(username_to), reply_to_message_id=call.message.id+1)
+                    bot.send_message(id_to, message_matching(chat_username) + " 👇")
+                    bot.MainMenu.view_profile(id_to, bot.profiles[chat_id])
 
                 sleep(2)
                 if Metrics(bot.states, chat_id).val is not None:  # if bot wasn't stopped

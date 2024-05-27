@@ -5,7 +5,9 @@
         "sex": "М",
         "age": 20,
         "desc": "Люблю скалолазание, а также ходить летом на Столбы с друзьями)",
-        "photo": ["AgACAgIAAxkBAAIBzmYWwcsEq_i-SDSC4dmvpZ1g7vDyAAKO3jEbcRW5SAzZ0gnRxiFvAQADAgADeQADNAQ"]
+        "photo": [
+            "AgACAgIAAxkBAAIBzmYWwcsEq_i-SDSC4dmvpZ1g7vDyAAKO3jEbcRW5SAzZ0gnRxiFvAQADAgADeQADNAQ"
+        ]
     },
     "1251823245": {
         "username": "Sancho_Panse03",
@@ -13,7 +15,9 @@
         "sex": "М",
         "age": 20,
         "desc": "Лазать скалы, кушать мясо, кататься лыжи, ботать физика, жить жизнь",
-        "photo": ["AgACAgIAAxkBAAIBr2YWwI530n0iF9a9W5WdVCGted7HAALT2TEbftOxSCphm-Y5DWcnAQADAgADeQADNAQ"]
+        "photo": [
+            "AgACAgIAAxkBAAIBr2YWwI530n0iF9a9W5WdVCGted7HAALT2TEbftOxSCphm-Y5DWcnAQADAgADeQADNAQ"
+        ]
     },
     "1006378267": {
         "username": "Alyata18",
@@ -21,7 +25,9 @@
         "sex": "Ж",
         "age": 19,
         "desc": "Хихи",
-        "photo": ["AgACAgIAAxkBAAIDrGYqS-VDriB9aMp-1pqCFTFyudxIAAIs3jEbTYFQSV6nEo5Fl0MmAQADAgADeQADNAQ"]
+        "photo": [
+            "AgACAgIAAxkBAAIDrGYqS-VDriB9aMp-1pqCFTFyudxIAAIs3jEbTYFQSV6nEo5Fl0MmAQADAgADeQADNAQ"
+        ]
     },
     "1207707842": {
         "username": "acmPing",
@@ -33,6 +39,17 @@
             "AgACAgIAAxkBAAIGX2ZB6tGatW4qEeSyPh0h0U-9mgABOgACItYxG1vTEUp0FPB_jNE1WQEAAwIAA3gAAzUE",
             "AgACAgIAAxkBAAIGYGZB6tEhhhzdsVQP42tKNjNQfHkxAAIj1jEbW9MRSk1v9KtquZBcAQADAgADeAADNQQ",
             "AgACAgIAAxkBAAIGYWZB6tHhKBDZJRCMdVt5REVucnI8AAIk1jEbW9MRSv3_c_2iPKleAQADAgADeAADNQQ"
+        ]
+    },
+    "1206109835": {
+        "username": "pole_ene",
+        "name": "Полина",
+        "sex": "Ж",
+        "age": 20,
+        "desc": "Люблю кофе и пёсиков🥺",
+        "photo": [
+            "AgACAgIAAxkBAAIG9mZUq7YeomTgbmusyIHmj0azu3ttAAK72zEbjQaASg0_qOHEm0aYAQADAgADeQADNQQ",
+            "AgACAgIAAxkBAAIG92ZUq7bYQxkGoeVTM_hhQeHQxWTvAAID3TEbRhtpSsnxfyIFori3AQADAgADeQADNQQ"
         ]
     }
 }

@@ -65,13 +65,14 @@ class Profile:
         short_text = lambda x: x if len(x) < 30 else x[:10] + "..." + x[-10:]
         short_file_id = lambda x: x[:5] + "..." + x[-5:]
         return (
-            f"username: {self.username}\n"
-            f"Имя: {self.name}\n"
+            # f"username: {self.username}\n"
+            f"👤 Имя: {self.name}\n"
             # f"Фамилия: {self.surname}\n"
-            f"пол: {self.sex}\n"
-            f"возраст: {self.age}\n"
-            f"описание: {short_text(self.desc)}\n"
-            f"фото: {"\n".join([short_file_id(file_id) for file_id in self.photo])}\n"
+            f"🚻 Пол: {self.sex}\n"
+            f"📆 Возраст: {self.age}\n"
+            f"✍️ Описание: {self.desc}\n"
+            # f"описание: {short_text(self.desc)}\n"
+            # f"фото: {"\n".join([short_file_id(file_id) for file_id in self.photo])}\n"
         )
 
 
@@ -104,6 +105,11 @@ class MainMenu:
         btn4 = types.KeyboardButton("Удалить аккаунт")
         markup.add(btn1, btn2, btn3, btn4)
         return markup
+
+    def choose_command(self, chat_id, state):
+        markup = self.main_markup()
+        self.bot.send_message(chat_id, "Выберите команду 👇", reply_markup=markup)
+        state.val = "main_menu"
 
     def create_profile(self, message: types.Message, state, temp_profile):
         chat_id = message.chat.id
@@ -202,39 +208,25 @@ class MainMenu:
             # print(file_info)
             # downloaded_file = self.bot.download_file(file_info.file_path)
 
-    def view_profile(self, chat_id, state, viewing_profile: Profile):
-        if self.get_tail(state.val) == 0:
-            if viewing_profile is None:
-                markup = self.main_markup()
-                self.bot.send_message(
-                    chat_id,
-                    "Вы ещё не создали свой профиль!",
-                    reply_markup=markup,
-                )
-            else:
-                print(chat_id, viewing_profile.name)  # !!!!!!!!!!!!!!
+    def view_profile(self, chat_id, viewing_profile: Profile, reply_to_message_id=None):
+        if viewing_profile is None:
+            markup = self.main_markup()
+            self.bot.send_message(
+                chat_id,
+                "Вы ещё не создали свой профиль!",
+                reply_markup=markup,
+            )
+        else:
+            print(chat_id, viewing_profile.name)  # !!!!!!!!!!!!!!
 
-                # file_info = self.bot.get_file(temp_profile.val.photo)
-                # downloaded_file = self.bot.download_file(file_info.file_path)
-
-                # self.bot.send_photo(
-                #     chat_id,
-                #     photo=downloaded_file,
-                #     caption=temp_profile.val,
-                #     reply_markup=markup,
-                # )
-                medias = [InputMediaPhoto(file_id) for file_id in viewing_profile.photo]
-                medias[0].caption = str(viewing_profile)
-                self.bot.send_media_group(
-                    chat_id=chat_id, media=medias, protect_content=True
-                )
-
-                markup = self.main_markup()
-                self.bot.send_message(
-                    chat_id, "Выберите команду 👇", reply_markup=markup
-                )
-
-            state.val = "main_menu"
+            medias = [InputMediaPhoto(file_id) for file_id in viewing_profile.photo]
+            medias[0].caption = str(viewing_profile)
+            self.bot.send_media_group(
+                chat_id=chat_id,
+                media=medias,
+                protect_content=True,
+                reply_to_message_id=reply_to_message_id
+            )
 
     def find_friends(self, message, chat_id, state):
         if self.get_tail(state.val) == 0:
@@ -265,13 +257,12 @@ class MainMenu:
 
                 # self.bot.MainMenu.view_profile(chat_id, state, stranger)
             else:
-                markup = self.main_markup()
                 self.bot.send_message(
                     chat_id,
-                    "Нам некого Вам предложить😢\nПовторите попытку позже!",
-                    reply_markup=markup,
+                    "Нам некого Вам предложить😢\nПовторите попытку позже!"
                 )
-                state.val = "main_menu"
+                self.choose_command(chat_id, state)
+
 
     def remove_account(self, chat_id, state):
         from IOFs import write_interactions, write_profiles_json
