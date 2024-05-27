@@ -190,10 +190,11 @@ class MainMenu:
             if message.text == "Отмена":
                 self.bot.CancelMenu.cancel(chat_id, state)
                 return
-            try:
+            # если пользователь отправил фото (не нажимал на кнопки меню)
+            try:  # check correct input
                 print(f"{message.photo=}" f"{message.media_group_id=}\n\n")
-                photo = message.photo[-1]
-                # check correct input
+                photo = message.photo[-1]  # фотографии приходят по отдельности
+
                 file_info = self.bot.get_file(photo.file_id)
                 temp_profile.val.photo.append(file_info.file_id)
             except TypeError:
@@ -208,7 +209,7 @@ class MainMenu:
             # print(file_info)
             # downloaded_file = self.bot.download_file(file_info.file_path)
 
-    def view_profile(self, chat_id, viewing_profile: Profile, reply_to_message_id=None):
+    def view_profile(self, chat_id, viewing_profile: Profile, reply_to_message_id: int = None):
         if viewing_profile is None:
             markup = self.main_markup()
             self.bot.send_message(
@@ -225,7 +226,7 @@ class MainMenu:
                 chat_id=chat_id,
                 media=medias,
                 protect_content=True,
-                reply_to_message_id=reply_to_message_id
+                reply_to_message_id=reply_to_message_id,
             )
 
     def find_friends(self, message, chat_id, state):
@@ -258,11 +259,9 @@ class MainMenu:
                 # self.bot.MainMenu.view_profile(chat_id, state, stranger)
             else:
                 self.bot.send_message(
-                    chat_id,
-                    "Нам некого Вам предложить😢\nПовторите попытку позже!"
+                    chat_id, "Нам некого Вам предложить😢\nПовторите попытку позже!"
                 )
                 self.choose_command(chat_id, state)
-
 
     def remove_account(self, chat_id, state):
         from IOFs import write_interactions, write_profiles_json
@@ -328,7 +327,7 @@ class SaveProfileMenu:
             chat_id, "Профиль успешно создан! ✅", reply_markup=markup
         )
         # отправляем профиль пользователю
-        self.bot.MainMenu.view_profile(chat_id, state, temp_profile.val)
+        self.bot.MainMenu.view_profile(chat_id, temp_profile.val)
         # сохроняем профиль в файл
         self.bot.profiles[chat_id] = temp_profile.val
         from IOFs import write_profiles_json
